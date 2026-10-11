@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黑猫投诉平台中仅退款投诉的品类、金额与办结去向</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 520px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  var NODES = [{"name": "服装鞋包", "itemStyle": {"color": "#3C7A89", "borderColor": "#3C7A89"}}, {"name": "食品生鲜", "itemStyle": {"color": "#5B8A97", "borderColor": "#5B8A97"}}, {"name": "数码家电", "itemStyle": {"color": "#7AA0AA", "borderColor": "#7AA0AA"}}, {"name": "美妆个护", "itemStyle": {"color": "#99B6BD", "borderColor": "#99B6BD"}}, {"name": "日用家居", "itemStyle": {"color": "#B8CCCF", "borderColor": "#B8CCCF"}}, {"name": "其他/未标明", "itemStyle": {"color": "#C9C2B4", "borderColor": "#C9C2B4"}}, {"name": "0元", "itemStyle": {"color": "#EFD3DA", "borderColor": "#EFD3DA"}}, {"name": "1–50元", "itemStyle": {"color": "#E3B6C2", "borderColor": "#E3B6C2"}}, {"name": "50–200元", "itemStyle": {"color": "#D07E92", "borderColor": "#D07E92"}}, {"name": "200元以上", "itemStyle": {"color": "#BC0039", "borderColor": "#BC0039"}}, {"name": "已办结", "itemStyle": {"color": "#9A9284", "borderColor": "#9A9284"}}, {"name": "未办结", "itemStyle": {"color": "#BC0039", "borderColor": "#BC0039"}}];
+  var LINKS = [{"source": "数码家电", "target": "1–50元", "value": 33}, {"source": "其他/未标明", "target": "0元", "value": 24}, {"source": "服装鞋包", "target": "200元以上", "value": 42}, {"source": "其他/未标明", "target": "200元以上", "value": 79}, {"source": "其他/未标明", "target": "1–50元", "value": 132}, {"source": "其他/未标明", "target": "50–200元", "value": 86}, {"source": "服装鞋包", "target": "1–50元", "value": 112}, {"source": "食品生鲜", "target": "200元以上", "value": 22}, {"source": "服装鞋包", "target": "50–200元", "value": 97}, {"source": "食品生鲜", "target": "1–50元", "value": 84}, {"source": "食品生鲜", "target": "50–200元", "value": 22}, {"source": "日用家居", "target": "0元", "value": 6}, {"source": "日用家居", "target": "200元以上", "value": 22}, {"source": "日用家居", "target": "1–50元", "value": 43}, {"source": "数码家电", "target": "50–200元", "value": 16}, {"source": "日用家居", "target": "50–200元", "value": 27}, {"source": "美妆个护", "target": "50–200元", "value": 9}, {"source": "数码家电", "target": "200元以上", "value": 24}, {"source": "服装鞋包", "target": "0元", "value": 15}, {"source": "美妆个护", "target": "1–50元", "value": 10}, {"source": "美妆个护", "target": "200元以上", "value": 5}, {"source": "数码家电", "target": "0元", "value": 5}, {"source": "食品生鲜", "target": "0元", "value": 10}, {"source": "1–50元", "target": "未办结", "value": 270}, {"source": "0元", "target": "未办结", "value": 47}, {"source": "0元", "target": "已办结", "value": 13}, {"source": "200元以上", "target": "未办结", "value": 141}, {"source": "200元以上", "target": "已办结", "value": 53}, {"source": "1–50元", "target": "已办结", "value": 144}, {"source": "50–200元", "target": "未办结", "value": 161}, {"source": "50–200元", "target": "已办结", "value": 96}];
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      title: [
+        { text: '黑猫投诉平台中仅退款投诉的品类、金额与办结去向',
+          left: 'center', top: 14,
+          textStyle: { fontSize: 17, color: '#272727', fontWeight: 'bold' } },
+        { text: '品类',   left: '6%',  top: 60, textStyle: subStyle() },
+        { text: '涉诉金额', left: '47%', top: 60, textStyle: subStyle() },
+        { text: '办结去向', left: '85%', top: 60, textStyle: subStyle() }
+      ],
+      tooltip: {
+        trigger: 'item', triggerOn: 'mousemove',
+        formatter: function(p){
+          if (p.dataType === 'edge') { return p.data.source + ' → ' + p.data.target + '：' + p.data.value + ' 条'; }
+          return p.name + '：' + p.value + ' 条';
+        }
+      },
+      series: [{
+        type: 'sankey', left: 24, right: 140, top: 92, bottom: 28,
+        nodeWidth: 16, nodeGap: 12, emphasis: { focus: 'adjacency' },
+        data: NODES, links: LINKS,
+        label: { color: '#272727', fontSize: 12, fontWeight: 'bold' },
+        lineStyle: { color: 'gradient', opacity: 0.42, curveness: 0.5 }
+      }]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  function subStyle(){ return { fontSize: 13, color: '#8A8378', fontWeight: 'bold' }; }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>
