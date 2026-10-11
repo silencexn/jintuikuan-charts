@@ -23,10 +23,7 @@
       title: [
         { text: '黑猫投诉平台中仅退款投诉的品类、金额与办结去向',
           left: 'center', top: 14,
-          textStyle: { fontSize: 17, color: '#272727', fontWeight: 'bold' } },
-        { text: '品类',    left: '8%',  top: 62, textAlign: 'center', textStyle: subStyle() },
-        { text: '涉诉金额', left: '50%', top: 62, textAlign: 'center', textStyle: subStyle() },
-        { text: '办结去向', left: '90%', top: 62, textAlign: 'center', textStyle: subStyle() }
+          textStyle: { fontSize: 17, color: '#272727', fontWeight: 'bold' } }
       ],
       tooltip: {
         trigger: 'item', triggerOn: 'mousemove',
@@ -36,7 +33,7 @@
         }
       },
       series: [{
-        type: 'sankey', left: 24, right: 140, top: 92, bottom: 28,
+        type: 'sankey', left: 24, right: 140, top: 60, bottom: 28,
         nodeWidth: 16, nodeGap: 12, emphasis: { focus: 'adjacency' },
         data: NODES, links: LINKS,
         label: { color: '#272727', fontSize: 12, fontWeight: 'bold' },
@@ -45,7 +42,6 @@
     });
     window.addEventListener('resize', function(){ chart.resize(); });
   }
-  function subStyle(){ return { fontSize: 13, color: '#8A8378', fontWeight: 'bold' }; }
   (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
 })();
 </script>
