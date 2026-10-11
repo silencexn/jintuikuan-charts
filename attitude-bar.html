@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商家对“仅退款”所持态度</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 420px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      dataset: {
+        source: [
+          ['stance', 'ratio', 'attitude'],
+          [1, 1.39, '非常支持'],
+          [2, 0.13, '支持'],
+          [3, 2.12, '一般'],
+          [4, 7.3, '反对'],
+          [5, 89.05, '非常反对']
+        ]
+      },
+      title: {
+        text: '超90%商家反对“仅退款”',
+        left: 'center',
+        textStyle: { fontSize: 17, color: '#272727' },
+        subtextStyle: { fontSize: 12, color: '#8A8A8A' }
+      },
+      grid: { containLabel: true, left: 10, right: 60, top: 80, bottom: 70 },
+      tooltip: { formatter: function (p) { return p.value[2] + '：' + p.value[1] + '%'; } },
+      xAxis: { name: '占比(%)', max: 100 },
+      yAxis: { type: 'category' },
+      visualMap: {
+        orient: 'horizontal', left: 'center', bottom: 10,
+        min: 1, max: 5, text: ['反对', '支持'], dimension: 0,
+        inRange: { color: ['#F7D9E2', '#BC0039', '#6E0022'] }
+      },
+      series: [
+        {
+          type: 'bar', barWidth: '55%',
+          encode: { x: 'ratio', y: 'attitude' },
+          label: { show: true, position: 'right', formatter: function (p) { return p.value[1] + '%'; }, color: '#272727' }
+        }
+      ]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>
