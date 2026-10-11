@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>各类经营范围被“仅退款”比例</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #ffffff; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 460px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    var cats  = ['未遇到“仅退款”', '“仅退款”订单比例约10%', '“仅退款”订单比例约30%', '“仅退款”订单比例约50%', '“仅退款”订单比例约80%'];
+    var vals  = [1.06, 46.65, 34.31, 10.09, 7.90];
+    chart.setOption({
+      title: [{ text: '近99%的商家一年内都遭遇过“仅退款”', left: 'center', textStyle: { fontSize: 17 } }],
+      color: ['#BC0039'],
+      polar: { radius: [30, '72%'], center: ['50%', '56%'] },
+      radiusAxis: { max: 50, axisLabel: { formatter: '{value}%' } },
+      angleAxis: { type: 'category', data: cats, startAngle: 90, axisLabel: { fontSize: 12, lineHeight: 15 } },
+      tooltip: { formatter: function (p) { return p.name.replace('\n', ' ') + '<br/>占比:' + p.value + '%'; } },
+      series: {
+        type: 'bar', data: vals, coordinateSystem: 'polar',
+        label: { show: true, position: 'middle', formatter: '{c}%', color: '#fff', fontWeight: 'bold' }
+      },
+      animation: true
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>
