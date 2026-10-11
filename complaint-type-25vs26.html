@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全国电商平台商家投诉问题类型分布</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 460px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    var cats = ['任意仅退款', '过度维护消费者', '任意罚款', '扣押保证金', '随意封店', '强制运费险', '其他'];
+    var d2025 = [45.22, 16.39, 11.94, 8.64, 3.25, 0.76, 13.81];
+    var d2026 = [34.39, 15.61, 20.70, 6.84, 5.44, 0.53, 16.49];
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      title: { text: '全国电商平台商家投诉问题类型分布', left: 'center', textStyle: { fontSize: 17, color: '#272727' } },
+      color: ['#C2C6CC', '#BC0039'],
+      grid: { left: 50, right: 24, top: 90, bottom: 90 },
+      legend: { bottom: 10, data: ['2025年', '2026年Q1'] },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'cross', label: { backgroundColor: '#283b56' } }, valueFormatter: function (v) { return v + '%'; } },
+      xAxis: { type: 'category', data: cats, axisLabel: { interval: 0, rotate: 20, fontSize: 11, color: '#272727' } },
+      yAxis: { type: 'value', name: '占比(%)', max: 50, axisLabel: { formatter: '{value}%' }, splitLine: { lineStyle: { color: '#ECECEC' } } },
+      series: [
+        { name: '2025年', type: 'bar', barWidth: '45%', data: d2025, label: { show: true, position: 'top', formatter: '{c}%', fontSize: 10, color: '#8A8A8A' } },
+        { name: '2026年Q1', type: 'line', data: d2026, smooth: false, symbol: 'circle', symbolSize: 7, lineStyle: { width: 3 }, label: { show: true, position: 'top', formatter: '{c}%', fontSize: 10, color: '#BC0039', fontWeight: 'bold' } }
+      ]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>

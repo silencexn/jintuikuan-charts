@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全国消协组织受理投诉情况统计</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 420px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      color: ['#8A0B2E', '#B01037', '#BC0039', '#CC4E6B', '#D56F86', '#E08FA1', '#E9AEBD', '#EFC8D3', '#F4DBE2', '#F9ECF0'],
+      title: { text: '全国消协组织受理投诉情况统计', left: 'center', textStyle: { fontSize: 16, color: '#272727' } },
+      tooltip: { trigger: 'item', formatter: '{b}：{c}% ({d}%)' },
+      legend: { top: '12%', left: 'center', type: 'scroll' },
+      series: [
+        {
+          name: '投诉性质', type: 'pie', radius: ['40%', '70%'], center: ['50%', '72%'],
+          startAngle: 180, endAngle: 360,
+          itemStyle: { borderColor: '#fff', borderWidth: 2 },
+          label: { formatter: '{b} {c}%', color: '#272727' },
+          data: [
+            { value: 27.68, name: '售后服务' }, { value: 23.79, name: '合同' },
+            { value: 19.51, name: '质量' }, { value: 7.88, name: '虚假宣传' },
+            { value: 5.93, name: '安全' }, { value: 5.13, name: '其他' },
+            { value: 4.73, name: '价格' }, { value: 3.48, name: '假冒' },
+            { value: 1.08, name: '人格权益' }, { value: 0.78, name: '计量' }
+          ]
+        }
+      ]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>

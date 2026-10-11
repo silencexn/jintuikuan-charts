@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2021—2025年度全国网上零售额及增速</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 440px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    var years = ['2021', '2022', '2023', '2024', '2025'];
+    var amount = [130884, 137853, 154264, 155225, 159722];
+    var growth = [14.1, 4, 11, 7.2, 8.6];
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      title: { text: '2021—2025年度全国网上零售额及增速', left: 'center', textStyle: { fontSize: 16, color: '#272727' } },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+      toolbox: { show: true, feature: { saveAsImage: {} } },
+      legend: { top: 50, data: ['网上零售额(亿元)', '同比增速(%)'] },
+      grid: { left: 70, right: 70, top: 90, bottom: 50 },
+      xAxis: { type: 'category', data: years, axisLabel: { color: '#272727', formatter: '{value}全年度' } },
+      yAxis: [
+        { type: 'value', name: '亿元', max: 180000, axisLabel: { formatter: '{value}' }, splitLine: { lineStyle: { color: '#EEE' } } },
+        { type: 'value', name: '增速 %', max: 16, axisLabel: { formatter: '{value}%' }, splitLine: { show: false } }
+      ],
+      series: [
+        { name: '网上零售额(亿元)', type: 'bar', yAxisIndex: 0, barWidth: '45%', itemStyle: { color: '#B9C2CE' }, label: { show: true, position: 'top', formatter: '{c}', color: '#5A6472', fontSize: 11 }, data: amount },
+        { name: '同比增速(%)', type: 'line', yAxisIndex: 1, smooth: false, symbol: 'circle', symbolSize: 7, lineStyle: { width: 3, color: '#BC0039' }, itemStyle: { color: '#BC0039' }, label: { show: true, formatter: '{c}%', color: '#BC0039', fontSize: 12, fontWeight: 'bold' }, data: growth }
+      ]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>

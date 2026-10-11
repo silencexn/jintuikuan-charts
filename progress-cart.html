@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>925条样本中投诉处理进度分布</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 420px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    var cart = 'path://M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z';
+    var maxData = 500, total = 925;
+    var cats = ['投诉已完成', '已回复', '待分配商家', '处理中'];
+    var vals = [306, 249, 209, 161];
+    var pct = { '投诉已完成': '33.0', '已回复': '26.9', '待分配商家': '22.5', '处理中': '17.4' };
+    var colors = ['#8A0B2E', '#BC0039', '#CC4E6B', '#E08FA1'];
+    var curData = vals.map(function (v, i) { return { value: v, itemStyle: { color: colors[i] } }; });
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      title: { text: '925条样本中投诉处理进度分布', left: 'center', textStyle: { fontSize: 16, color: '#272727' } },
+      tooltip: { formatter: function (p) { return p.name + '：' + p.value + ' 件（' + (p.value / total * 100).toFixed(1) + '%）'; } },
+      xAxis: { max: maxData, interval: 100, splitLine: { show: false }, offset: 10, axisLine: { lineStyle: { color: '#999' } }, axisLabel: { margin: 10 } },
+      yAxis: { data: cats, inverse: true, axisTick: { show: false }, axisLine: { show: false },
+        axisLabel: { margin: 12, formatter: function (v) { return '{n|' + v + '}\n{p|' + pct[v] + '%}'; },
+          rich: { n: { fontSize: 15, color: '#272727', fontWeight: 'bold', lineHeight: 20 }, p: { fontSize: 13, color: '#BC0039', lineHeight: 18 } } } },
+      grid: { top: 90, bottom: 40, height: 240, left: 130, right: 50 },
+      series: [
+        { type: 'pictorialBar', symbol: cart, symbolRepeat: 'fixed', symbolMargin: '12%', symbolClip: true, symbolSize: 26, symbolBoundingData: maxData, data: curData, z: 10 },
+        { type: 'pictorialBar', itemStyle: { color: '#EADFE3', opacity: 0.6 }, label: { show: false }, animationDuration: 0, symbolRepeat: 'fixed', symbolMargin: '12%', symbol: cart, symbolSize: 26, symbolBoundingData: maxData, data: vals, z: 5 }
+      ]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黑猫投诉中“仅退款”投诉涉及平台分布</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 480px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    var SCALE = 1.5, OPACITY = 0.7;
+    var raw = [
+      ['拼多多', 246], ['抖音商城', 94], ['美团外卖', 60], ['淘宝商城', 45],
+      ['京东商城', 22], ['快手商城', 13], ['京东外卖', 12], ['小红书商城', 6]
+    ];
+    var ramp = ['#BC0039', '#C85A74', '#D07E92', '#D99BAB', '#E3B6C2', '#ECCAD3', '#EFD3DA', '#F3DEE3'];
+    var total = 925;
+    var nodes = raw.map(function (d, i) {
+      return { name: d[0], value: d[1], symbolSize: 7.6 * SCALE * Math.sqrt(d[1]),
+        itemStyle: { color: ramp[i], opacity: OPACITY, borderColor: ramp[i], borderWidth: 1 },
+        label: { color: i < 3 ? '#fff' : '#5A1026' } };
+    });
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      title: { text: '黑猫投诉中“仅退款”投诉涉及平台分布', left: 'center', textStyle: { fontSize: 16, color: '#272727' } },
+      tooltip: { formatter: function (p) { return p.data.name + '：' + p.data.value + ' 次（' + (p.data.value / total * 100).toFixed(1) + '%）'; } },
+      series: [
+        {
+          type: 'graph', layout: 'force', roam: true, draggable: true,
+          force: { repulsion: 300, gravity: 0.08, friction: 0.6 },
+          label: { show: true, position: 'inside', formatter: function (p) { return p.data.name + '\n' + p.data.value; }, fontSize: 12, fontWeight: 'bold', textBorderColor: 'rgba(255,255,255,0.35)', textBorderWidth: 2 },
+          data: nodes
+        }
+      ]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>

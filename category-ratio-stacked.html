@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>各类经营范围被“仅退款”比例</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 480px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    var cats = ['食品生鲜','服饰鞋帽','个护清洁','美妆护肤','数码家电','母婴用品','运动户外','酒水饮料'];
+    var levels = [
+      { name: '0（未遇到）', color: '#6E0022', lab: '#ffffff', data: [1.04, 1.73, 0.79, 0.93, 0.30, 0.61, 2.68, 0] },
+      { name: '约10%',      color: '#F7D9E2', lab: '#272727', data: [42.21,42.42,43.08,43.52,44.61,49.09,42.53,39.53] },
+      { name: '约30%',      color: '#ECB9C7', lab: '#272727', data: [36.68,35.89,33.99,30.56,37.13,29.09,35.25,30.23] },
+      { name: '约50%',      color: '#D97695', lab: '#ffffff', data: [11.42,10.56, 8.70, 5.56,11.08, 7.88, 9.96,23.26] },
+      { name: '约80%',      color: '#BC0039', lab: '#ffffff', data: [ 8.65, 9.40,13.44,19.44, 6.89,13.33, 9.58, 6.98] }
+    ];
+    var series = levels.map(function (lv) {
+      return { name: lv.name, type: 'bar', stack: 'total', barWidth: '55%', itemStyle: { color: lv.color },
+        label: { show: true, color: lv.lab, formatter: function (p) { return p.value >= 3 ? p.value + '%' : ''; }, fontSize: 11 },
+        emphasis: { focus: 'series' }, data: lv.data };
+    });
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      title: { text: '各类经营范围被“仅退款”比例', left: 'center', textStyle: { fontSize: 17, color: '#272727' } },
+      grid: { left: 50, right: 24, top: 80, bottom: 60 },
+      legend: { bottom: 10, selectedMode: false, textStyle: { color: '#272727' } },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, valueFormatter: function (v) { return v + '%'; } },
+      xAxis: { type: 'category', data: cats, axisLabel: { interval: 0, fontSize: 12, color: '#272727' }, axisLine: { lineStyle: { color: '#272727' } } },
+      yAxis: { type: 'value', max: 100, axisLabel: { formatter: '{value}%', color: '#272727' }, splitLine: { lineStyle: { color: '#ECECEC' } } },
+      series: series
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>

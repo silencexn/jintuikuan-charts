@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2025年综合电商 GMV 份额区间</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 420px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    var raw = [
+      ['淘天', 29, 32], ['抖音电商', 20, 24], ['拼多多', 19, 21],
+      ['京东', 14, 17], ['快手', 5, 6], ['微信生态', 3, 5], ['小红书等', 3, 5]
+    ];
+    var cats = raw.map(function (d) { return d[0]; });
+    var ramp = ['#BC0039', '#C85A74', '#D07E92', '#D99BAB', '#E3B6C2', '#ECCAD3', '#F3DEE3'];
+    var data = raw.map(function (d, i) { return [i, d[1], d[2]]; });
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      title: { text: '2025年综合电商 GMV 份额区间', left: 'center', textStyle: { fontSize: 16, color: '#272727' } },
+      grid: { left: 90, right: 90, top: 85, bottom: 45 },
+      tooltip: { trigger: 'item', formatter: function (p) { return cats[p.data[0]] + '：' + p.data[1] + '%–' + p.data[2] + '%'; } },
+      xAxis: { type: 'value', max: 35, axisLabel: { formatter: '{value}%' }, splitLine: { lineStyle: { color: '#EEE' } } },
+      yAxis: { type: 'category', data: cats, inverse: true, axisTick: { show: false }, axisLine: { show: false }, axisLabel: { color: '#272727', fontSize: 13 } },
+      series: [
+        {
+          type: 'custom', encode: { x: [1, 2], y: 0 }, data: data,
+          renderItem: function (params, api) {
+            var idx = api.value(0);
+            var pLow = api.coord([api.value(1), idx]);
+            var pHigh = api.coord([api.value(2), idx]);
+            var color = ramp[idx];
+            return { type: 'group', children: [
+              { type: 'line', shape: { x1: pLow[0], y1: pLow[1], x2: pHigh[0], y2: pHigh[1] }, style: { stroke: color, lineWidth: 12, lineCap: 'round' } },
+              { type: 'circle', shape: { cx: pLow[0], cy: pLow[1], r: 7 }, style: { fill: color } },
+              { type: 'circle', shape: { cx: pHigh[0], cy: pHigh[1], r: 7 }, style: { fill: color } },
+              { type: 'text', style: { text: api.value(1) + '%–' + api.value(2) + '%', x: pHigh[0] + 12, y: pHigh[1], textAlign: 'left', textVerticalAlign: 'middle', fill: '#272727', fontSize: 12, fontWeight: 'bold' } }
+            ] };
+          }
+        }
+      ]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>

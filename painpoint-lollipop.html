@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>“客服不处理”成头号痛点</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 440px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    var cats = ['客服不处理/处理不当', '仅退款', '货不对板', '退货不退款', '商品质量问题', '不予退款', '虚假发货', '退款'];
+    var vals = [46, 29, 14, 14, 14, 12, 11, 10];
+    var ramp = ['#8A0B2E', '#A3184A', '#BC0039', '#C85A74', '#D07E92', '#D99BAB', '#E3B6C2', '#ECCAD3'];
+    var dots = vals.map(function (v, i) { return { value: v, itemStyle: { color: ramp[i] } }; });
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      title: { text: '“客服不处理”成头号痛点', left: 'center', textStyle: { fontSize: 16, color: '#272727' } },
+      grid: { left: 130, right: 50, top: 90, bottom: 40 },
+      tooltip: { trigger: 'item', formatter: '{b}：{c}' },
+      xAxis: { type: 'value', max: 50, splitLine: { lineStyle: { color: '#EEE' } } },
+      yAxis: { type: 'category', data: cats, inverse: true, axisTick: { show: false }, axisLine: { show: false }, axisLabel: { color: '#272727', fontSize: 13 } },
+      series: [
+        { name: '杆', type: 'bar', barWidth: 2, itemStyle: { color: '#B9C2CE' }, data: vals, z: 1 },
+        { name: '痛点', type: 'pictorialBar', symbol: 'circle', symbolSize: 18, symbolPosition: 'end', symbolClip: false, data: dots,
+          label: { show: true, position: 'right', formatter: '{c}', color: '#272727', fontSize: 12, fontWeight: 'bold' }, z: 2 }
+      ]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>

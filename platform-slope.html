@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2025-2026年Q1商家投诉平台占比</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #FFFBF2; }
+  #jtk_chart { width: 100%; height: 100vh; min-height: 420px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="jtk_chart"></div>
+<script>
+(function(){
+  function render(){
+    var chart = echarts.init(document.getElementById('jtk_chart'));
+    var periods = ['2025年报', '2026年Q1'];
+    var rows = [
+      { name: '拼多多',   v: [41.31, 38.31], color: '#6E747C' },
+      { name: '抖音电商', v: [28.25, 36.03], color: '#BC0039' },
+      { name: '淘宝',     v: [15.33, 11.78], color: '#AEB4BC' }
+    ];
+    chart.setOption({
+      backgroundColor: '#FFFBF2',
+      title: { text: '2025-2026年Q1商家投诉平台占比', left: 'center', textStyle: { fontSize: 16, color: '#272727' } },
+      grid: { left: 130, right: 130, top: 90, bottom: 50 },
+      tooltip: { trigger: 'item', formatter: function (p) { return p.seriesName + '<br/>' + p.name + '：' + p.value + '%'; } },
+      xAxis: { type: 'category', data: periods, boundaryGap: false, axisTick: { show: false }, axisLine: { lineStyle: { color: '#CCC' } }, axisLabel: { color: '#272727', fontSize: 13, fontWeight: 'bold' } },
+      yAxis: { show: false, min: 0, max: 45 },
+      series: rows.map(function (r) {
+        return { name: r.name, type: 'line', symbol: 'circle', symbolSize: 9, lineStyle: { width: 3, color: r.color }, itemStyle: { color: r.color }, emphasis: { focus: 'series' },
+          data: [
+            { value: r.v[0], label: { show: true, position: 'left', formatter: r.name + ' ' + r.v[0] + '%', color: r.color, fontWeight: 'bold', fontSize: 12 } },
+            { value: r.v[1], label: { show: true, position: 'right', formatter: r.v[1] + '%', color: r.color, fontWeight: 'bold', fontSize: 12 } }
+          ] };
+      })
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  (function wait(){ if(window.echarts){ render(); } else { setTimeout(wait,50); } })();
+})();
+</script>
+</body>
+</html>
